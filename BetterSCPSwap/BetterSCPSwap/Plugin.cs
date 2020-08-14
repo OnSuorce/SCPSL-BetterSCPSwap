@@ -9,7 +9,7 @@ namespace BetterSCPSwap
     {
         private static readonly Lazy<Plugin> LazyInstance = new Lazy<Plugin>(() => new Plugin());
         public static Plugin pluginInstance => LazyInstance.Value;
-        public List<Player> playersToSwap;
+        public Handlers.SwapEvent swapEvent;
 
         public override void OnEnabled()
         {
@@ -22,15 +22,16 @@ namespace BetterSCPSwap
         }
         public void Register()
         {
-            playersToSwap = new List<Player>();
+            swapEvent = new Handlers.SwapEvent();
+            Exiled.Events.Handlers.Server.SendingConsoleCommand += swapEvent.onConsoleCommand;
 
         }
         public void UnRegister()
         {
             //Exiled.Events.Handlers.Scp914.UpgradingItems -= GulagEvent.OnUpgrading;
-          
+            Exiled.Events.Handlers.Server.SendingConsoleCommand -= swapEvent.onConsoleCommand;
 
-
+            swapEvent = null;
         }
     }
 }
